@@ -1,12 +1,15 @@
+import 'package:booking/modules/serviceProviderScreen.dart';
 import 'package:flutter/material.dart';
 
 service({
   required String name,
   required String url,
-  void Function()?ontap,
-
+  required BuildContext context,
+  required int id,
 })=> GestureDetector(
-  onTap: ontap,
+  onTap: (){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> ServiceScreen(url,id)));
+  },
   child:   Container(
 
       height: 150,
