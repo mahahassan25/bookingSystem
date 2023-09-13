@@ -4,12 +4,15 @@ import 'package:booking/layout/homeScreen.dart';
 import 'package:booking/modules/signin/cubit.dart';
 import 'package:booking/modules/signin/states.dart';
 import 'package:booking/modules/register/signup.dart';
+import 'package:booking/remote/sharedPref.dart';
 import 'package:booking/shared/buttonTextcomp.dart';
 import 'package:booking/shared/inputText.dart';
 import 'package:booking/shared/toaster.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class signinScreen extends StatelessWidget {
   const signinScreen({super.key});
@@ -29,6 +32,7 @@ class signinScreen extends StatelessWidget {
           }
           if(state is signInSucessState){
             showToast(text: 'you have sucessfuly loged in', state: ToastStates.correct);
+            casheHelper.saveData(key: 'uid', value:state.uid );
             Navigator.push(context, MaterialPageRoute(builder: (context)=> homeScreen()));
           }
             
@@ -70,7 +74,24 @@ class signinScreen extends StatelessWidget {
                           suffixicon: signInCubit.get(context).hidden? Icons.visibility_off : Icons.visibility
                       ),
                       SizedBox(height: 3,),
-                      buttonText(onpressed: (){}, title: 'Forgot Password?'),
+                      buttonText(onpressed: ()async{
+                        if(emailController.text == ""){
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            desc: 'you must enter your email ',
+                          ).show();
+                        }
+                        else {
+                          await FirebaseAuth.instance.sendPasswordResetEmail(
+                              email: emailController.text);
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.warning,
+                            desc: 'a link has sent to your email to reset your password',
+                          ).show();
+                        }
+                      }, title: 'Forgot Password?'),
                       SizedBox(height: 30,),
                       ConditionalBuilder(
                           condition: state is! signInLoadingState,

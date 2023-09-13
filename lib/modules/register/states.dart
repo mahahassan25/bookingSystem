@@ -8,5 +8,8 @@ class regiterErrorState extends registerStates{
   final String error;
   regiterErrorState(this.error);
 }
-class CreateUserSucessState extends registerStates{}
+class CreateUserSucessState extends registerStates{
+  final String uid;
+  CreateUserSucessState(this.uid);
+}
 class CreateUserErrorState extends registerStates{}

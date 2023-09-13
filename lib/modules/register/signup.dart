@@ -9,6 +9,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:booking/remote/sharedPref.dart';
 
 class signupScreen extends StatelessWidget {
   const signupScreen({super.key});
@@ -29,6 +30,8 @@ class signupScreen extends StatelessWidget {
             showToast(text: state.error, state: ToastStates.error);
           }
           if(state is CreateUserSucessState){
+            showToast(text: 'you have successfully signed up ', state: ToastStates.correct);
+            casheHelper.saveData(key: 'uid', value:state.uid );
              Navigator.push(
                 context,
                MaterialPageRoute(
@@ -167,6 +170,7 @@ class signupScreen extends StatelessWidget {
                                   User?user;
                                 user=await  registerCubit.get(context).signInWithGoogle();
                                 if(user != null){
+                                  casheHelper.saveData(key: 'uid', value: user.uid);
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>homeScreen()));
                                 }
                                 }),
@@ -182,7 +186,12 @@ class signupScreen extends StatelessWidget {
                                 iconColor: Colors.blue,
                                 textColor: Colors.blue,
                                 context: context,
-                                function: () {}),
+                                function: ()async {
+                               final UserCredential user= await   registerCubit.get(context).signInWithFacebook();
+                               if(context.mounted){
+                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>homeScreen()));
+                               }
+                                }),
                           ),
                         ],
                       ),

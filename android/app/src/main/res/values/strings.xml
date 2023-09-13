@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">booking-system</string>
+    <string name="facebook_app_id">564091209121976</string>
+    <string name="fb_login_protocol_scheme">fb048019ca196d989312e471c06d4634c3</string>
+</resources>

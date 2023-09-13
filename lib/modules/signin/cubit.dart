@@ -19,7 +19,7 @@ class signInCubit extends Cubit<signInStates>{
         email: email,
         password: password).then(
             (value) {
-              emit(signInSucessState());
+              emit(signInSucessState(value.user!.uid));
               print('ggggggggggggggggggggggggggdddddddddddddddddddddddddddddddddddddddd');
               print(value.user!.email);
             }).catchError(
